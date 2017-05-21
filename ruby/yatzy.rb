@@ -1,127 +1,66 @@
 class Yatzy
 
   def initialize(d1, d2, d3, d4, d5)
-    @dice = [0]*5
-    @dice[0] = d1
-    @dice[1] = d2
-    @dice[2] = d3
-    @dice[3] = d4
-    @dice[4] = d5
+    @dice = [d1, d2, d3, d4, d5]
   end
 
   def self.chance(d1, d2, d3, d4, d5)
-    total = 0
-    total += d1
-    total += d2
-    total += d3
-    total += d4
-    total += d5
-    return total
+    values = set_dice_array(d1, d2, d3, d4, d5)
+    values.reduce(:+)
   end
 
   def self.yatzy(d1, d2, d3, d4, d5)
-    dice = [d1, d2, d3, d4, d5]
-    counts = [0]*(dice.length+1)
-    for die in dice do
-      counts[die-1] += 1
+    die = [d1, d2, d3, d4, d5]
+    is_yatzy = die.all? { |value| value == die[0] }
+    determine_score(is_yatzy)
+  end
+
+  def self.determine_score(is_yatzy)
+    if is_yatzy
+      50
+    else
+      0
     end
-    for i in 0..counts.size do
-      if counts[i] == 5
-        return 50
-      end
-    end
-    return 0
   end
 
   def self.ones( d1,  d2,  d3,  d4,  d5)
-    sum = 0
-    if (d1 == 1)
-      sum += 1
-    end
-    if (d2 == 1)
-      sum += 1
-    end
-    if (d3 == 1)
-      sum += 1
-    end
-    if (d4 == 1)
-      sum += 1
-    end
-    if (d5 == 1)
-      sum += 1
-    end
-
-    sum
+    die = set_dice_array(d1, d2, d3, d4, d5)
+    determine_score_for_number(die, 1)
   end
 
   def self.twos( d1,  d2,  d3,  d4,  d5)
-    sum = 0
-    if (d1 == 2)
-      sum += 2
-    end
-    if (d2 == 2)
-      sum += 2
-    end
-    if (d3 == 2)
-      sum += 2
-    end
-    if (d4 == 2)
-      sum += 2
-    end
-    if (d5 == 2)
-      sum += 2
-    end
-    return sum
+    die = set_dice_array(d1, d2, d3, d4, d5)
+    determine_score_for_number(die, 2)
   end
 
   def self.threes( d1,  d2,  d3,  d4,  d5)
-    s = 0
-    if (d1 == 3)
-      s += 3
-    end
-    if (d2 == 3)
-      s += 3
-    end
-    if (d3 == 3)
-      s += 3
-    end
-    if (d4 == 3)
-      s += 3
-    end
-    if (d5 == 3)
-      s += 3
-    end
-    return s
+    die = set_dice_array(d1, d2, d3, d4, d5)
+    determine_score_for_number(die, 3)
+  end
+
+  def self.set_dice_array(d1, d2, d3, d4, d5)
+    [d1, d2, d3, d4, d5]
+  end
+
+  def self.determine_score_for_number(die, value)
+    count = die.count { |dice| dice == value }
+    count * value
   end
 
   def fours
-    sum = 0
-    for at in Array 0..4
-      if (@dice[at] == 4)
-        sum += 4
-      end
-    end
-    return sum
+    determine_score_for_number(4)
   end
 
-  def fives()
-    s = 0
-    i = 0
-    for i in (Range.new(0, @dice.size))
-      if (@dice[i] == 5)
-        s = s + 5
-      end
-    end
-    s
+  def fives
+    determine_score_for_number(5)
   end
 
   def sixes
-    sum = 0
-    for at in 0..@dice.length
-      if (@dice[at] == 6)
-        sum = sum + 6
-      end
-    end
-    return sum
+    determine_score_for_number(6)
+  end
+
+  def determine_score_for_number(value)
+    count = @dice.count { |dice| dice == value }
+    count * value
   end
 end
